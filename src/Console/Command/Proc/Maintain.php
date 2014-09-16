@@ -26,6 +26,5 @@ class Maintain extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeLn('Maintain');
     }
 }

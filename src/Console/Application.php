@@ -2,7 +2,9 @@
 
 namespace D3R\Proc\Console;
 
+use D3R\Proc\Config\HasConfigTrait;
 use D3R\Proc\Constants;
+use D3R\Proc\Config\ConfigInterface;
 use Symfony\Component\Console\Application as BaseApplication;
 
 /**
@@ -15,13 +17,16 @@ use Symfony\Component\Console\Application as BaseApplication;
  */
 class Application extends BaseApplication
 {
+    use HasConfigTrait;
+
     /**
      * Class constructor
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct()
+    public function __construct(ConfigInterface $config)
     {
+        $this->setConfig($config);
         parent::__construct(Constants::NAME, Constants::VERSION);
     }
 
