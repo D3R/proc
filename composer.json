@@ -1,0 +1,20 @@
+{
+    "name": "d3r/proc",
+    "description": "Simple proc-like filesystem to expose capabilities of the host machine",
+    "require": {
+        "symfony/console": "~2.5",
+        "symfony/process": "~2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "D3R\\Proc\\": "src"
+        }
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Ronan Chilvers",
+            "email": "ronan@d3r.com"
+        }
+    ]
+}
