@@ -26,5 +26,7 @@ class Maintain extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $config = $this->getConfig();
+
     }
 }

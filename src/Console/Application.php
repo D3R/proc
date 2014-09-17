@@ -2,10 +2,11 @@
 
 namespace D3R\Proc\Console;
 
+use D3R\Proc\Config\ConfigInterface;
 use D3R\Proc\Config\HasConfigTrait;
 use D3R\Proc\Constants;
-use D3R\Proc\Config\ConfigInterface;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Command\Command as ConsoleCommand;
 
 /**
  * Console application
@@ -27,6 +28,7 @@ class Application extends BaseApplication
     public function __construct(ConfigInterface $config)
     {
         $this->setConfig($config);
+
         parent::__construct(Constants::NAME, Constants::VERSION);
     }
 
@@ -39,9 +41,28 @@ class Application extends BaseApplication
         $commands = parent::getDefaultCommands();
 
         $commands = array_merge($commands, array(
-            new Command\Proc\Maintain()
+            new Command\Proc\Maintain(),
+            new Command\Config\Show(),
+            new Command\Config\Setup()
         ));
 
         return $commands;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Overriden to allow setting in config, log and container objects
+     *
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function add(ConsoleCommand $command)
+    {
+        $command = parent::add($command);
+        if ($command instanceof Command\Command) {
+            $command->setConfig($this->getConfig());
+        }
+
+        return $command;
     }
 }
