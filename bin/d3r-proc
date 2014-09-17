@@ -1,10 +1,11 @@
 #!/usr/bin/which php
 <?php
 
-use D3R\Proc\Console\Application;
 use D3R\Proc\Config\Config;
+use D3R\Proc\Console\Application;
+use D3R\Proc\Container\Container;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$application = new Application(Config::instance());
+$application = new Application(Config::singleton(), Container::singleton());
 $application->run();

@@ -24,7 +24,7 @@ class Config implements ConfigInterface
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected static $instance = null;
+    protected static $singleton = null;
 
     /**
      * Standard singleton static getter
@@ -32,9 +32,9 @@ class Config implements ConfigInterface
      * @return static
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public static function instance()
+    public static function singleton()
     {
-        if (false == (static::$instance instanceof static)) {
+        if (false == (static::$singleton instanceof static)) {
             $locations = array(
                 static::getSystemConfig(),
                 static::getUserConfig()
@@ -44,9 +44,9 @@ class Config implements ConfigInterface
             $config->defaults(new Defaults());
             $config->load($locations);
 
-            static::$instance = $config;
+            static::$singleton = $config;
         }
-        return static::$instance;
+        return static::$singleton;
     }
 
     /**

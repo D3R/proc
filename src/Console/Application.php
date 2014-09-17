@@ -5,6 +5,8 @@ namespace D3R\Proc\Console;
 use D3R\Proc\Config\ConfigInterface;
 use D3R\Proc\Config\HasConfigTrait;
 use D3R\Proc\Constants;
+use D3R\Proc\Container\HasContainerTrait;
+use Pimple\Container;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 
@@ -19,15 +21,17 @@ use Symfony\Component\Console\Command\Command as ConsoleCommand;
 class Application extends BaseApplication
 {
     use HasConfigTrait;
+    use HasContainerTrait;
 
     /**
      * Class constructor
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, Container $container)
     {
         $this->setConfig($config);
+        $this->setContainer($container);
 
         parent::__construct(Constants::NAME, Constants::VERSION);
     }
@@ -41,7 +45,7 @@ class Application extends BaseApplication
         $commands = parent::getDefaultCommands();
 
         $commands = array_merge($commands, array(
-            new Command\Proc\Maintain(),
+            new Command\Proc\Start(),
             new Command\Config\Show(),
             new Command\Config\Setup()
         ));
@@ -61,6 +65,7 @@ class Application extends BaseApplication
         $command = parent::add($command);
         if ($command instanceof Command\Command) {
             $command->setConfig($this->getConfig());
+            $command->setContainer($this->getContainer());
         }
 
         return $command;

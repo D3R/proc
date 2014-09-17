@@ -3,24 +3,25 @@
 namespace D3R\Proc\Console\Command\Proc;
 
 use D3R\Proc\Console\Command\Command;
+use D3R\Proc\Monitor\Monitor;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * This command maintains the proc filesystem
+ * This command monitors the proc filesystem
  *
  * @author    Ronan Chilvers <ronan@d3r.com>
  * @copyright 2014 D3R Ltd
  * @license   http://d3r.com/license D3R Software Licence
  * @package   D3R\Proc\Console\Command\Proc;
  */
-class Maintain extends Command
+class Start extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('proc:maintain')
-            ->setDescription('Run the maintenance loop for the proc filesystem')
+            ->setName('proc:start')
+            ->setDescription('Run the monitor loop for the proc filesystem')
             ;
     }
 
@@ -28,5 +29,10 @@ class Maintain extends Command
     {
         $config = $this->getConfig();
 
+        $output->writeLn('Initialising monitor');
+        $monitor = new Monitor($config);
+        $monitor->loop();
+
+        $output->writeLn('Monitor exiting');
     }
 }
