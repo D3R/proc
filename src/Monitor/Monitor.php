@@ -5,6 +5,8 @@ namespace D3R\Proc\Monitor;
 use D3R\Proc\Config\ConfigInterface;
 use D3R\Proc\Config\HasConfigTrait;
 use D3R\Proc\Container\HasContainerTrait;
+use D3R\Proc\Service\HasLoaderTrait;
+use D3R\Proc\Service\LoaderInterface;
 use Pimple\Container;
 
 /**
@@ -18,16 +20,24 @@ use Pimple\Container;
 class Monitor implements MonitorInterface
 {
     use HasConfigTrait;
-    use HasContainerTrait;
+    use HasLoaderTrait;
+
+    /**
+     * Member that controls if the loop() method should continue looping
+     *
+     * @var boolean
+     */
+    protected $loop = true;
 
     /**
      * Class constructor
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, LoaderInterface $loader)
     {
         $this->setConfig($config);
+        $this->setLoader($loader);
     }
 
     /**
@@ -35,5 +45,11 @@ class Monitor implements MonitorInterface
      */
     public function loop()
     {
+        // $services = $this->getLoader();
+        // while ($this->loop) {
+        //     foreach ($services as $service) {
+        //         $service->evaluate();
+        //     }
+        // }
     }
 }

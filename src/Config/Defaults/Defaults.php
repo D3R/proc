@@ -42,7 +42,7 @@ class Defaults implements DefaultsInterface
                 'label'    => 'The root directory in which the proc filesystem root will be created',
                 'required' => true
             ),
-            'dir.members' => array(
+            'dir.services' => array(
                 'value'    => '/etc/d3r-proc.d',
                 'label'    => 'The directory in which member configs are stored',
                 'required' => true

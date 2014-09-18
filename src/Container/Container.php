@@ -4,6 +4,7 @@ namespace D3R\Proc\Container;
 
 use D3R\Proc\Config\Config;
 use D3R\Proc\Monitor\Monitor;
+use D3R\Proc\Service\Loader\Loader;
 use Pimple\Container as Pimple;
 
 /**
@@ -37,9 +38,13 @@ class Container
         $config    = Config::singleton();
         $container = new Pimple();
 
-        $container['monitor'] = function() use ($config) {
-            $monitor = new Monitor($config);
+        $container['monitor'] = function($c) use ($config) {
+            $monitor = new Monitor($config, $c['service.loader']);
             return $monitor;
+        };
+
+        $container['service.loader'] = function() use ($config) {
+            return new Loader($config);
         };
 
         static::$singleton = $container;

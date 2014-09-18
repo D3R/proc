@@ -27,11 +27,14 @@ class Start extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->getConfig();
+        $container = $this->getContainer();
+
+        $loader = $container['service.loader'];
+        $loader->scan();
 
         $output->writeLn('Initialising monitor');
-        $monitor = new Monitor($config);
-        $monitor->loop();
+        // $monitor = $container['monitor'];
+        // $monitor->loop();
 
         $output->writeLn('Monitor exiting');
     }
