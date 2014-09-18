@@ -31,6 +31,8 @@ class Start extends Command
 
         $loader = $container['service.loader'];
         $loader->scan();
+        // @TODO Remove var_dump
+        // var_dump($loader); exit();
 
         $output->writeLn('Initialising monitor');
         // $monitor = $container['monitor'];
