@@ -2,6 +2,8 @@
 
 namespace D3R\Proc\Service;
 
+use D3R\Proc\Service\Test\TestInterface;
+
 /**
  * Interface for service objects
  *
@@ -12,5 +14,12 @@ namespace D3R\Proc\Service;
  */
 interface ServiceInterface
 {
-
+    /**
+     * Add a test to this service
+     *
+     * @param D3R\Proc\Service\Test\TestInterface
+     * @return $this
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function addTest(TestInterface $test);
 }

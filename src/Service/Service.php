@@ -2,6 +2,8 @@
 
 namespace D3R\Proc\Service;
 
+use D3R\Proc\Service\Test\TestInterface;
+
 /**
  * Service object implementation
  *
@@ -39,7 +41,8 @@ class Service implements ServiceInterface
      */
     public function __construct($key)
     {
-        $this->key = $key;
+        $this->key   = $key;
+        $this->tests = array();
     }
 
     /**
@@ -51,5 +54,15 @@ class Service implements ServiceInterface
     public function getKey()
     {
         return $this->key;
+    }
+
+    /**
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function addTest(TestInterface $test)
+    {
+        $this->tests[] = $test;
+
+        return $this;
     }
 }
