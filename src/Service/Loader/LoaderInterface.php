@@ -12,5 +12,11 @@ namespace D3R\Proc\Service\Loader;
  */
 interface LoaderInterface
 {
-
+    /**
+     * Scan for service definitions
+     *
+     * @return void
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function scan();
 }
