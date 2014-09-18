@@ -10,7 +10,7 @@ namespace D3R\Proc\Service\Test;
  * @license   http://d3r.com/license D3R Software Licence
  * @package   D3R\Proc\Service\Test
  */
-class TestOptionsTrait
+trait TestOptionsTrait
 {
     /**
      * The options array
