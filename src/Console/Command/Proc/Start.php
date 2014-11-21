@@ -5,6 +5,7 @@ namespace D3R\Proc\Console\Command\Proc;
 use D3R\Proc\Console\Command\Command;
 use D3R\Proc\Monitor\Monitor;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -22,6 +23,24 @@ class Start extends Command
         $this
             ->setName('proc:start')
             ->setDescription('Run the monitor loop for the proc filesystem')
+            ->addOption(
+                'root',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Set the root directory for the proc filesystem'
+            )
+            ->addOption(
+                'services',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The directory to load service definitions from'
+            )
+            ->addOption(
+                'interval',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The refresh interval for the proc tree in seconds'
+            )
             ;
     }
 
@@ -33,8 +52,12 @@ class Start extends Command
         $tree      = $container['tree'];
         $handler   = $container['signal.handler'];
 
+        $root      = $input->getOption('root') ? $input->getOption('root') : $config->get('dir.root') ;
+        $services  = $input->getOption('services') ? $input->getOption('services') : $config->get('dir.services') ;
+        $interval  = $input->getOption('interval') ? $input->getOption('interval') : $config->get('tree.refresh') ;
+
         $output->writeLn('loading services');
-        $loader->scan($config->get('dir.services'));
+        $loader->scan($services);
 
         $output->writeLn('creating tree');
         foreach ($loader->getServices() as $service) {
@@ -46,7 +69,7 @@ class Start extends Command
         });
 
         $output->writeLn('starting tree monitor');
-        $tree->monitor($output, $config->get('tree.refresh'));
+        $tree->monitor($root, $interval, $output);
 
         $output->writeLn('monitoring stopped');
     }

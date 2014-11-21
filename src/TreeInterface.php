@@ -32,11 +32,13 @@ interface TreeInterface
     /**
      * Start monitoring services and maintain the tree stcutre accordingly
      *
+     * @param   string $root
      * @param   int $refreshInterval The interval for tree refreshes in seconds
+     * @param   Symfony\Component\Console\Output\OutputInterface $output
      * @return  void
      * @author  Ronan Chilvers <ronan@d3r.com>
      */
-    public function monitor(OutputInterface $output, $refreshInterval = 1);
+    public function monitor($root, $refreshInterval = 1, OutputInterface $output);
 
     /**
      * Stop monitoring the tree

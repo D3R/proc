@@ -19,13 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Tree implements TreeInterface
 {
     /**
-     * Rhe root directory for this tree
-     *
-     * @var string
-     */
-    protected $root;
-
-    /**
      * Tree nodes
      *
      * This is an associative array where the keys are paths and the values are
@@ -47,9 +40,8 @@ class Tree implements TreeInterface
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct($root)
+    public function __construct()
     {
-        $this->root  = $root;
         $this->nodes = array();
         $this->loop  = true;
     }
@@ -71,16 +63,16 @@ class Tree implements TreeInterface
     /**
      * @author  Ronan Chilvers <ronan@d3r.com>
      */
-    public function monitor(OutputInterface $output, $refreshInterval = 1)
+    public function monitor($root, $refreshInterval = 1, OutputInterface $output)
     {
         while ($this->loop) {
             foreach ($this->nodes as $path => $service) {
                 if (true == $service->evaluate()) {
                     $output->writeLn('creating node ' . $path);
-                    $this->createNode($path);
+                    $this->createNode($root, $path);
                 } else {
                     $output->writeLn('removing node ' . $path);
-                    $this->removeNode($path);
+                    $this->removeNode($root, $path);
                 }
             }
             $output->writeLn('sleeping for ' . $refreshInterval . ' seconds');
@@ -88,7 +80,7 @@ class Tree implements TreeInterface
         }
 
         foreach ($this->nodes as $path => $node) {
-            $this->removeNode($path);
+            $this->removeNode($root, $path);
         }
     }
 
@@ -107,17 +99,17 @@ class Tree implements TreeInterface
      * @return boolean
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function createNode($path)
+    protected function createNode($root, $path)
     {
         $fs   = new LocalFilesystem();
-        if (false == $fs->ensureDir($this->root, dirname($path))) {
+        if (false == $fs->ensureDir($root, dirname($path))) {
             throw new Exception(
                 'Unable to ensure directory ' .
-                $fs->join($this->root, dirname($path)) .
+                $fs->join($root, dirname($path)) .
                 ' exists'
             );
         }
-        $file = $fs->file($this->root, $path);
+        $file = $fs->file($root, $path);
         if ($file->exists()) {
             return true;
         }
@@ -132,10 +124,10 @@ class Tree implements TreeInterface
      * @return boolean
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function removeNode($path)
+    protected function removeNode($root, $path)
     {
         $fs   = new LocalFilesystem();
-        $file = $fs->file($this->root, $path);
+        $file = $fs->file($root, $path);
         if (!$file->exists()) {
             return true;
         }

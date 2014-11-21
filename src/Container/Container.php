@@ -45,7 +45,7 @@ class Container
         };
 
         $container['tree'] = function() use ($config) {
-            return new Tree($config->get('dir.root'));
+            return new Tree();
         };
 
         $container['signal.handler'] = function() use ($config) {
