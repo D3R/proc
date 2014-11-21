@@ -22,7 +22,8 @@ class Factory
      */
     protected $classMap = array(
             'extension' => 'D3R\Proc\Service\Test\Extension',
-            'tcp'       => 'D3R\Proc\Service\Test\Tcp'
+            'tcp'       => 'D3R\Proc\Service\Test\Tcp',
+            'file'      => 'D3R\Proc\Service\Test\File'
         );
 
     /**
