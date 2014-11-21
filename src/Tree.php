@@ -87,7 +87,6 @@ class Tree implements TreeInterface
             sleep($refreshInterval);
         }
 
-        // Cleanup
         foreach ($this->nodes as $path => $node) {
             $this->removeNode($path);
         }
