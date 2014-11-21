@@ -110,6 +110,13 @@ class Tree implements TreeInterface
     protected function createNode($path)
     {
         $fs   = new LocalFilesystem();
+        if (false == $fs->ensureDir($this->root, dirname($path))) {
+            throw new Exception(
+                'Unable to ensure directory ' .
+                $fs->join($this->root, dirname($path)) .
+                ' exists'
+            );
+        }
         $file = $fs->file($this->root, $path);
         if ($file->exists()) {
             return true;
