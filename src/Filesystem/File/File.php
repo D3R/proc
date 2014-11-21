@@ -52,6 +52,7 @@ class File implements FileInterface
      */
     public function read()
     {
+        clearstatcache();
         if (!$this->content = @file_get_contents($this->path)) {
             return false;
         }
@@ -118,6 +119,7 @@ class File implements FileInterface
      */
     public function exists()
     {
+        clearstatcache();
         return file_exists($this->path);
     }
 
@@ -127,6 +129,7 @@ class File implements FileInterface
      */
     public function writable()
     {
+        clearstatcache();
         return is_writable($this->path);
     }
 
@@ -136,7 +139,19 @@ class File implements FileInterface
      */
     public function readable()
     {
+        clearstatcache();
         return is_readable($this->path);
+    }
+
+    /**
+     * Touch a file on disk, creating it if it doesn't exist
+     *
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function touch()
+    {
+        return touch($this->path);
     }
 
     /**
@@ -145,6 +160,7 @@ class File implements FileInterface
      */
     public function write()
     {
+        clearstatcache();
         if (!@file_put_contents($this->path, $this->content)) {
             return false;
         }
@@ -157,6 +173,7 @@ class File implements FileInterface
      */
     public function unlink()
     {
+        clearstatcache();
         return unlink($this->path);
     }
 

@@ -15,8 +15,17 @@ interface LoaderInterface
     /**
      * Scan for service definitions
      *
-     * @return void
+     * @param  string $directory
+     * @return bool
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function scan();
+    public function scan($directory);
+
+    /**
+     * Get an array of loaded services
+     *
+     * @return array
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getServices();
 }

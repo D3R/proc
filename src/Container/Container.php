@@ -5,6 +5,8 @@ namespace D3R\Proc\Container;
 use D3R\Proc\Config\Config;
 use D3R\Proc\Monitor\Monitor;
 use D3R\Proc\Service\Loader\Loader;
+use D3R\Proc\Tree;
+use Neutron\SignalHandler\SignalHandler;
 use Pimple\Container as Pimple;
 
 /**
@@ -38,13 +40,17 @@ class Container
         $config    = Config::singleton();
         $container = new Pimple();
 
-        $container['monitor'] = function($c) use ($config) {
-            $monitor = new Monitor($config, $c['service.loader']);
-            return $monitor;
-        };
-
         $container['service.loader'] = function() use ($config) {
             return new Loader($config);
+        };
+
+        $container['tree'] = function() use ($config) {
+            return new Tree($config->get('dir.root'));
+        };
+
+        $container['signal.handler'] = function() use ($config) {
+            declare(ticks=1);
+            return SignalHandler::getInstance();
         };
 
         static::$singleton = $container;

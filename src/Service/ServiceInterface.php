@@ -22,4 +22,20 @@ interface ServiceInterface
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function addTest(TestInterface $test);
+
+    /**
+     * Get the path for this service
+     *
+     * @return string
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getPath();
+
+    /**
+     * Evaluate all tests and return true if the service is available, false otherwise
+     *
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function evaluate();
 }

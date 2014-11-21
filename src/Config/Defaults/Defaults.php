@@ -47,6 +47,11 @@ class Defaults implements DefaultsInterface
                 'label'    => 'The directory in which member configs are stored',
                 'required' => true
             ),
+            'tree.refresh' => array(
+                'value'    => '1',
+                'label'    => 'The refresh interval for tree nodes in seconds',
+                'required' => true
+            ),
         );
     }
 

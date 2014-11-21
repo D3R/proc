@@ -27,17 +27,27 @@ class Start extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $config    = $this->getConfig();
         $container = $this->getContainer();
+        $loader    = $container['service.loader'];
+        $tree      = $container['tree'];
+        $handler   = $container['signal.handler'];
 
-        $loader = $container['service.loader'];
-        $loader->scan();
-        // @TODO Remove var_dump
-        var_dump($loader); exit();
+        $output->writeLn('loading services');
+        $loader->scan($config->get('dir.services'));
 
-        $output->writeLn('Initialising monitor');
-        // $monitor = $container['monitor'];
-        // $monitor->loop();
+        $output->writeLn('creating tree');
+        foreach ($loader->getServices() as $service) {
+            $tree->attach($service);
+        }
+        $output->writeLn('registering monitor with signal handler');
+        $handler->register(array(SIGTERM, SIGINT), function() use ($tree) {
+            $tree->stop();
+        });
 
-        $output->writeLn('Monitor exiting');
+        $output->writeLn('starting tree monitor');
+        $tree->monitor($output, $config->get('tree.refresh'));
+
+        $output->writeLn('monitoring stopped');
     }
 }

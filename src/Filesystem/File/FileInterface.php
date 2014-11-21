@@ -87,6 +87,14 @@ interface FileInterface
     public function readable();
 
     /**
+     * Touch a file on disk, creating it if it doesn't exist
+     *
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function touch();
+
+    /**
      * Save this file to disk
      *
      * @return boolean

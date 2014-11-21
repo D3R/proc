@@ -19,8 +19,6 @@ use D3R\Proc\Service\Test\Factory\Factory;
  */
 class Loader implements LoaderInterface
 {
-    use HasConfigTrait;
-
     /**
      * A set of loaded services
      *
@@ -33,37 +31,44 @@ class Loader implements LoaderInterface
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct()
     {
-        $this->setConfig($config);
-        $this->services = array();
+        $this->services  = array();
     }
 
     /**
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function scan()
+    public function scan($directory)
     {
         $this->services = array();
 
-        $config = $this->getConfig();
         $fs     = new LocalFilesystem();
-
-        $serviceRoot = $config->get('dir.services');
-        if (!$fs->exists($serviceRoot)) {
+        if (!$fs->exists($directory)) {
             throw new Exception('Service root does not exist');
         }
 
         $factory = new Factory();
-        foreach (glob($fs->join($serviceRoot, '*.xml')) as $file) {
+        foreach (glob($fs->join($directory, '*.xml')) as $file) {
             $xml = simplexml_load_file($file);
             $service = new Service((string) $xml['key']);
             foreach ($xml->test as $testXML) {
                 $service->addTest($factory->fromXML($testXML));
             }
-            var_dump($service);
-
             $this->services[] = $service;
         }
+
+        return true;
+    }
+
+    /**
+     * Get an array of loaded services
+     *
+     * @return array
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getServices()
+    {
+        return $this->services;
     }
 }

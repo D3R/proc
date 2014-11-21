@@ -77,7 +77,7 @@ class LocalFilesystem implements FilesystemInterface
     public function exists()
     {
         $filename = call_user_func_array(array($this, 'join'), func_get_args());
-
+        $this->clearStatCache();
         return file_exists($filename);
     }
 
@@ -89,6 +89,7 @@ class LocalFilesystem implements FilesystemInterface
     public function ensureDir()
     {
         $path = call_user_func_array(array($this, 'join'), func_get_args());
+        $this->clearStatCache();
 
         if (is_dir($path)) {
             return true;
@@ -112,7 +113,18 @@ class LocalFilesystem implements FilesystemInterface
         if ($destination->exists() && !$destination->writable()) {
             throw new Exception('Destination not writable');
         }
-
+        $this->clearStatCache();
         return copy($source->path(), $destination->path());
+    }
+
+    /**
+     * Clear the stat cache to ensure valid results
+     *
+     * @return void
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function clearStatCache()
+    {
+        clearstatcache();
     }
 }

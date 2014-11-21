@@ -47,7 +47,8 @@ class Application extends BaseApplication
         $commands = array_merge($commands, array(
             new Command\Proc\Start(),
             new Command\Config\Show(),
-            new Command\Config\Setup()
+            new Command\Config\Set(),
+            new Command\Config\Setup(),
         ));
 
         return $commands;

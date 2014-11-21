@@ -46,12 +46,12 @@ class Service implements ServiceInterface
     }
 
     /**
-     * Get the key for this service
+     * Get the path for this service
      *
      * @return string
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function getKey()
+    public function getPath()
     {
         return $this->key;
     }
@@ -64,5 +64,22 @@ class Service implements ServiceInterface
         $this->tests[] = $test;
 
         return $this;
+    }
+
+    /**
+     * Evaluate all tests and return true if the service is available, false otherwise
+     *
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function evaluate()
+    {
+        foreach ($this->tests as $test) {
+            if (!$test->evaluate()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
