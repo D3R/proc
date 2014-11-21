@@ -300,9 +300,5 @@ class Config implements ConfigInterface
             list($hostname, $dummy) = explode('.', $hostname, 2);
         }
         $this->immutable['uname.hostname']     = $hostname;
-
-        $this->immutable['backup.bucket']      = 'd3r-backups';
-        $this->immutable['backup.path.site']   = 'sites';
-        $this->immutable['backup.path.server'] = 'servers';
     }
 }
