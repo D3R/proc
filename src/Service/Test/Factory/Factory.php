@@ -2,6 +2,7 @@
 
 namespace D3R\Proc\Service\Test\Factory;
 
+use D3R\Proc\Exception;
 use D3R\Proc\Service\Test\Exception\UnknownTestException;
 use D3R\Proc\Service\Test\Extension;
 
@@ -16,17 +17,6 @@ use D3R\Proc\Service\Test\Extension;
 class Factory
 {
     /**
-     * Map of test classes to XML type names
-     *
-     * @var array
-     */
-    protected $classMap = array(
-            'extension' => 'D3R\Proc\Service\Test\Extension',
-            'tcp'       => 'D3R\Proc\Service\Test\Tcp',
-            'file'      => 'D3R\Proc\Service\Test\File'
-        );
-
-    /**
      * Get an instance of a test object from an xml fragment
      *
      * @param \SimpleXMLElement
@@ -35,12 +25,7 @@ class Factory
      */
     public function fromXML(\SimpleXMLElement $xml)
     {
-        $type = (string) $xml['type'];
-        if (!isset($this->classMap[$type])) {
-            throw new UnknownTestException('Unknown test type ' . $type);
-        }
-
-        $class = $this->classMap[$type];
+        $class   = $this->resolveType((string) $xml['type']);
         $options = array();
         foreach ($xml->attributes() as $key => $value) {
             if ('type' == $key) {
@@ -50,5 +35,23 @@ class Factory
         }
 
         return new $class($options);
+    }
+
+    /**
+     * Resolve a test class from a given type name
+     *
+     * @param string $type
+     * @return D3R\Proc\Service\Test\TestInterface
+     * @throws D3R\Proc\Exception
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function resolveType($type)
+    {
+        $class = 'D3R\Proc\Service\Test\\' . ucfirst(strtolower($type));
+        if (!class_exists($class)) {
+            throw new Exception('Unknown test type ' . $type);
+        }
+
+        return $class;
     }
 }

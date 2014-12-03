@@ -38,12 +38,34 @@ class File implements FileInterface
     }
 
     /**
+     * Is this file a directory?
+     *
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function isDir()
+    {
+        return is_dir($this->path);
+    }
+
+    /**
      * {@inheritdoc}
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function path()
     {
         return $this->path;
+    }
+
+    /**
+     * Get the directory name for this file
+     *
+     * @return string
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function dirname()
+    {
+        return dirname($this->path);
     }
 
     /**
@@ -174,6 +196,9 @@ class File implements FileInterface
     public function unlink()
     {
         clearstatcache();
+        if ($this->isDir()) {
+            return rmdir($this->path);
+        }
         return unlink($this->path);
     }
 

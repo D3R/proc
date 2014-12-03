@@ -15,4 +15,7 @@ class Constants
     const NAME         = 'd3r-proc';
     const VERSION      = '@dev_version@';
     const RELEASE_DATE = '@release_date@';
+
+    const NAMESPACE_FACILITY = 'facility';
+    const NAMESPACE_SERVICE = 'service';
 }

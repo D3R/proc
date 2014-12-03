@@ -56,21 +56,22 @@ class Start extends Command
         $services  = $input->getOption('services') ? $input->getOption('services') : $config->get('dir.services') ;
         $interval  = $input->getOption('interval') ? $input->getOption('interval') : $config->get('tree.refresh') ;
 
-        $output->writeLn('loading services');
+        $output->writeLn('<info>initialising</info>');
+        $output->writeLn('<comment>loading services</comment>');
         $loader->scan($services);
 
-        $output->writeLn('creating tree');
+        $output->writeLn('<comment>creating tree</comment>');
         foreach ($loader->getServices() as $service) {
             $tree->attach($service);
         }
-        $output->writeLn('registering monitor with signal handler');
+        $output->writeLn('<comment>registering monitor with signal handler</comment>');
         $handler->register(array(SIGTERM, SIGINT), function() use ($tree) {
             $tree->stop();
         });
 
-        $output->writeLn('starting tree monitor');
+        $output->writeLn('<info>starting tree monitor</info>');
         $tree->monitor($root, $interval, $output);
 
-        $output->writeLn('monitoring stopped');
+        $output->writeLn('<info>monitoring stopped</info>');
     }
 }

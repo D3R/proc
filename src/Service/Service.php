@@ -2,6 +2,7 @@
 
 namespace D3R\Proc\Service;
 
+use D3R\Proc\Constants;
 use D3R\Proc\Service\Test\TestInterface;
 
 /**
@@ -14,6 +15,27 @@ use D3R\Proc\Service\Test\TestInterface;
  */
 class Service implements ServiceInterface
 {
+    /**
+     * The namespace for this service
+     *
+     * Supported namespaces are:
+     *   - facility
+     *   - service
+     *
+     * @var string
+     */
+    protected $namespace = Constants::NAMESPACE_FACILITY;
+
+    /**
+     * Array of supported namespaces
+     *
+     * @var array
+     */
+    protected $namespaces = [
+        Constants::NAMESPACE_FACILITY,
+        Constants::NAMESPACE_SERVICE,
+    ];
+
     /**
      * The service key
      *
@@ -39,10 +61,24 @@ class Service implements ServiceInterface
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct($key)
+    public function __construct($key, $namespace = false)
     {
-        $this->key   = $key;
+        $this->key   = $this->normalise($key);
+        if (in_array($namespace, $this->namespaces)) {
+            $this->namespace = $namespace;
+        }
         $this->tests = array();
+    }
+
+    /**
+     * Get the namespace for this service
+     *
+     * @return string
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
@@ -53,7 +89,7 @@ class Service implements ServiceInterface
      */
     public function getPath()
     {
-        return $this->key;
+        return $this->namespace . '/' . $this->key;
     }
 
     /**
@@ -81,5 +117,15 @@ class Service implements ServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * Normalise a key, removing any illegal characters
+     *
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function normalise($key)
+    {
+        return preg_replace('#[^A-z0-9]+#', '_', $key);
     }
 }

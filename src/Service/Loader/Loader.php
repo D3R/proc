@@ -51,7 +51,7 @@ class Loader implements LoaderInterface
         $factory = new Factory();
         foreach (glob($fs->join($directory, '*.xml')) as $file) {
             $xml = simplexml_load_file($file);
-            $service = new Service((string) $xml['key']);
+            $service = new Service((string) $xml['key'], (string) $xml['namespace']);
             foreach ($xml->test as $testXML) {
                 $service->addTest($factory->fromXML($testXML));
             }

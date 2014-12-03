@@ -68,19 +68,24 @@ class Tree implements TreeInterface
         while ($this->loop) {
             foreach ($this->nodes as $path => $service) {
                 if (true == $service->evaluate()) {
-                    $output->writeLn('creating node ' . $path);
+                    $output->writeLn('<comment>creating node ' . $path . '</comment>');
                     $this->createNode($root, $path);
                 } else {
-                    $output->writeLn('removing node ' . $path);
+                    $output->writeLn('<comment>removing node ' . $path . '</comment>');
                     $this->removeNode($root, $path);
                 }
             }
-            $output->writeLn('sleeping for ' . $refreshInterval . ' seconds');
+            $output->writeLn('<comment>sleeping for ' . $refreshInterval . ' seconds</comment>');
             sleep($refreshInterval);
         }
 
+        $namespaces = [];
         foreach ($this->nodes as $path => $node) {
+            $namespaces[$node->getNamespace()] = $node->getNamespace();
             $this->removeNode($root, $path);
+        }
+        foreach ($namespaces as $namespace) {
+            $this->removeNode($root, $namespace);
         }
     }
 
@@ -102,14 +107,14 @@ class Tree implements TreeInterface
     protected function createNode($root, $path)
     {
         $fs   = new LocalFilesystem();
-        if (false == $fs->ensureDir($root, dirname($path))) {
+        $file = $fs->file($root, $path);
+        if (false == $fs->ensureDir($file->dirname())) {
             throw new Exception(
                 'Unable to ensure directory ' .
-                $fs->join($root, dirname($path)) .
+                $file->dirname() .
                 ' exists'
             );
         }
-        $file = $fs->file($root, $path);
         if ($file->exists()) {
             return true;
         }
